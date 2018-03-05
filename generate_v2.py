@@ -18,43 +18,28 @@ file_object.write('UINT32 add = 0;\n')
 file_object.write('UINT32 add1 = 100;\n')
 file_object.write('UINT32 add2 = 200;\n')
 file_object.write('UINT32 a = 1;\n')
-for i in range(0, 7):
-	file_object.write('__asm {NOP};\n')
 
-operand1 = 100
-operand2 = 200
-operand3 = 300
+#warm up instructions 
+for i in range(0, 10):
+   file_object.write('__asm {NOP};\n')
 
-mode = raw_input('What is the mode, random, increment or matrix')
-if mode == 'increment':
-   step1 = raw_input('What is the step size for operand1')
-   step2 = raw_input('What is the step size for operand2')
-   #step3 = raw_input('What is the step size for operand3')
+#read operands 
+op_file = open('op_file.txt')
+op_list = op_file.readlines()
 
-   for i in range(0,1000):
-		file_object.write('__asm {ORR add,' + str(operand1) + ',' + str(operand2) + '};\n')
-		#file_object.write('__asm {MLA add,' + str(operand1) + ',' + str(operand2) + '};\n')
-	  #  file_object.write('__asm {MLA add,add1,' + str(operand2) + '};\n')
-	  # file_object.write('__asm {MOV r0,#0xe740};\n')
-	  # if step == 0:
-	   #file_object.write('__asm {MOV };\n')
-		operand1 = operand1 + int(step1)
-		operand2 = operand2 + int(step2)
-		#operand3 = operand3 + int(step3)
-elif mode == "random":
-   for i in range(0, 1000):
-		file_object.write('__asm {ORR add,' + str(operand1) + ',' + str(operand2) + '};\n')
-		#file_object.write('__asm {NOP};\n')
-		#operand1 = randint(0,1000)
-		operand2 = randint(0,1000)
-		#operand3 = randint(0,4000)
-elif mode == "matrix":
-    shutil.copy2('main_matrix.c', 'main.c')
-else:
-   print 'wrong mode, please input again'
 
-for i in range(0, 7):
-	file_object.write('__asm {NOP};\n')   
+#generate test instructions (MUL in this example)  
+for i in range(0, len(op_list)):
+   index1 = randint(0,10)
+   index2 = randint(0,10)
+   index3 = randint(0,10)
+   op1, op2 = op_list[i].split()[0], op_list[i].split()[1]
+   #generate MUL instructions with random registers 
+   file_object.write('__asm {MUL r' + str(index1) + ', r' + str(index2) + ', r' + str(index3) + '};\n')   
+
+#cooling down instructions
+for i in range(0, 10): 
+   file_object.write('__asm {NOP};\n')   
    
 file_object.write('return 0;\n')
 file_object.write('}')
