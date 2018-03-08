@@ -2,7 +2,7 @@
 set ffList ""
 foreach_in_collection ff [all_registers] {
 set name [get_property $ff full_name]
-if {[regexp cm3_dpu_regfile $name] || [regexp ip_core1 $name]} {
+if {[regexp mcyc $name]} {
 lappend ffList $name
 }
 }
